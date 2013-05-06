@@ -1,3 +1,7 @@
+# Install and configure the KermIT Webui, a dashboard that provides a central
+# management solution for IT systems and applications.
+# See http://www.kermit.fr
+
 class kermitwebui {
 
     include apache
@@ -13,7 +17,7 @@ class kermitwebui {
         'Django', 'uuid', 'python26', 'python26-docutils', 'ordereddict',
         'python26-httplib2', 'python26-redis', 'python26-mod_wsgi',
         'django-celery', 'django-grappelli', 'django-guardian', 'django-kombu',
-        'django-picklefield'
+        'django-picklefield', 'policycoreutils',
       ]
     }
 
@@ -22,7 +26,8 @@ class kermitwebui {
         'Django', 'uuid', 'python-docutils', 'python-ordereddict',
         'python-httplib2', 'python-redis', 'python-dateutil15',
         'python-amqplib', 'mod_wsgi', 'django-celery','django-grappelli',
-        'django-guardian', 'django-kombu', 'django-picklefield'
+        'django-guardian', 'django-kombu', 'django-picklefield',
+        'policycoreutils-python',
       ]
     }
 
@@ -31,13 +36,18 @@ class kermitwebui {
         require => Yumrepo[ 'kermit-custom', 'kermit-thirdpart' ],
     }
 
+    package { 'kermit-webui' :
+        ensure  => present,
+        require => $webuireq_packages,
+    }
+
     file { '/etc/httpd/conf.d/kermit-webui.conf' :
         ensure  => present,
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
         content => template( 'kermitwebui/kermit-webui.conf' ),
-        require => Package[ 'httpd' ],
+        require => Package[ 'httpd', 'kermit-webui' ],
     }
 
     file { '/etc/kermit/kermit-webui.cfg' :
@@ -75,6 +85,17 @@ class kermitwebui {
         group   => 'root',
         mode    => '0755',
         source  => 'puppet:///modules/kermitwebui/purge-redis.sh',
+        replace => false,
+        require => File[ '/root/kermit' ],
+    }
+
+    file { 'postconf.sh' :
+        ensure  => present,
+        path    => '/root/kermit/postconf.sh',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        source  => 'puppet:///modules/kermitwebui/postconf.sh',
         replace => false,
         require => File[ '/root/kermit' ],
     }
