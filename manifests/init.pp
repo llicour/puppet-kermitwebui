@@ -38,7 +38,7 @@ class kermitwebui {
 
     package { 'kermit-webui' :
         ensure  => present,
-        require => $webuireq_packages,
+        require => Package [ $webuireq_packages ],
     }
 
     file { '/etc/httpd/conf.d/kermit-webui.conf' :
