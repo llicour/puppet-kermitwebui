@@ -4,13 +4,13 @@
 
 class kermitwebui {
 
-    include apache
     include redis
     include yum::epel
     include kermit
 
-    realize( Package[ 'httpd' ] )
-    realize( Service[ 'httpd' ] )
+    #include apache
+    #realize( Package[ 'httpd' ] )
+    #realize( Service[ 'httpd' ] )
 
     if $::operatingsystemrelease =~ /^5\./ {
       $webuireq_packages = [
@@ -47,7 +47,8 @@ class kermitwebui {
         group   => 'root',
         mode    => '0644',
         content => template( 'kermitwebui/kermit-webui.conf' ),
-        require => Package[ 'httpd', 'kermit-webui' ],
+        #require => Package[ 'httpd', 'kermit-webui' ],
+        require => Package[ 'kermit-webui' ],
     }
 
     file { '/etc/kermit/kermit-webui.cfg' :
