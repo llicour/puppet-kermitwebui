@@ -9,9 +9,7 @@ class kermitwebui {
     include kermit
 
     # cf puppetlabs-apache
-    class { 'apache' : }
-
-    #include apache
+    include apache
     #realize( Package[ 'httpd' ] )
     #realize( Service[ 'httpd' ] )
 
