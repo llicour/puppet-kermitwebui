@@ -8,6 +8,9 @@ class kermitwebui {
     include yum::epel
     include kermit
 
+    # cf puppetlabs-apache
+    class { 'apache' : }
+
     #include apache
     #realize( Package[ 'httpd' ] )
     #realize( Service[ 'httpd' ] )
@@ -47,8 +50,7 @@ class kermitwebui {
         group   => 'root',
         mode    => '0644',
         content => template( 'kermitwebui/kermit-webui.conf' ),
-        #require => Package[ 'httpd', 'kermit-webui' ],
-        require => Package[ 'kermit-webui' ],
+        require => Package[ 'httpd', 'kermit-webui' ],
     }
 
     file { '/etc/kermit/kermit-webui.cfg' :
