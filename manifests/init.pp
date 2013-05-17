@@ -8,7 +8,9 @@ class kermitwebui {
     include yum::epel
     include kermit
 
-    # cf puppetlabs-apache
+    # cf puppetlabs
+    apache::mod { 'wsgi': }
+
     include apache
     #realize( Package[ 'httpd' ] )
     #realize( Service[ 'httpd' ] )
@@ -26,7 +28,7 @@ class kermitwebui {
       $webuireq_packages = [
         'Django', 'uuid', 'python-docutils', 'python-ordereddict',
         'python-httplib2', 'python-redis', 'python-dateutil15',
-        'python-amqplib', 'mod_wsgi', 'django-celery','django-grappelli',
+        'python-amqplib', 'django-celery','django-grappelli',
         'django-guardian', 'django-kombu', 'django-picklefield',
         'policycoreutils-python',
       ]
