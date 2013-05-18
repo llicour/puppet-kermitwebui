@@ -9,11 +9,8 @@ class kermitwebui {
     include kermit
 
     # cf puppetlabs
-    apache::mod { 'wsgi': }
-
     include apache
-    #realize( Package[ 'httpd' ] )
-    #realize( Service[ 'httpd' ] )
+    apache::mod { 'wsgi': }
 
     if $::operatingsystemrelease =~ /^5\./ {
       $webuireq_packages = [
