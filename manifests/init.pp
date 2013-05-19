@@ -8,9 +8,11 @@ class kermitwebui {
     include yum::epel
     include kermit
 
-    # cf puppetlabs
+    # cf module puppetlabs-apache
     include apache
     apache::mod { 'wsgi': }
+    # the puppetlabs base apache module v. 0.6.0 does not open the http port
+    include apachefw
 
     if $::operatingsystemrelease =~ /^5\./ {
       $webuireq_packages = [
